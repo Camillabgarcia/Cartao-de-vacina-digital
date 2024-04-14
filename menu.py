@@ -1,82 +1,101 @@
-import os
+class CartaoDeVacina:
+    def __init__(self):
+        self.nome = None
+        self.cpf = None
+        self.data_nascimento = None
+        self.endereco = None
+        self.vacinas = []
 
-usuarios = []
-vacinas = []
+    def adicionar_usuario(self):
+        print('* Cadastro do Usuário *')
+        self.nome = input('Nome: ')
+        self.cpf = input('Cpf: ')
+        self.data_nascimento = input('Data de Nascimento: ')
+        self.endereco = input('Endereço: ')
 
-def exibir_nome_do_programa():
-    print('Cartão de Vacina Digital : \n')
+    def cadastrar_vacina(self):
+        if not self.nome:
+            print('É necessário fazer o cadastro do usuário primeiro.')
+            return
 
-def exibir_opcoes():
-    print('1.Cadastrar Usuário')
-    print('2.Cadastrar Vacina')
-    print('3.Listar Vacinas')
-    print('4.Sair\n')
+        print('Cadastro da Vacina')
+        nome_vacina = input('Nome da Vacina: ')
+        lote_vacina = input('Lote da Vacina: ')
+        doses_totais = int(input('Quantidade total de doses: '))
 
-def finalizar_app():
-    os.system('cls')     #limpa a tela e mostrar a seguinte mensagem:
-    print('Procedimento Finalizado\n')
+        vacina = {
+            'nome': nome_vacina,
+            'lote': lote_vacina,
+            'doses_totais': doses_totais,
+            'doses_aplicadas': 0
+        }
 
-def opcao_invalida():
-    print('Opção inválida\n')
-    input('Digite um tecla para voltar ao menu principal')
-    main()
+        self.vacinas.append(vacina)
 
-def cadastrar_nova_vacina():
-    os.system('cls')
-    print('Cadastro de Vacina')
-    nome_da_vacina = input('Digite o nome da vacina: ')
-    vacinas.append(nome_da_vacina)
-    lote_da_vacina =  input('Digite o lote da vacina: ')
-    vacinas.append(lote_da_vacina)
-    print(f'A vacina {nome_da_vacina} foi cadastrada com sucesso.')
-    input('Digite um tecla para voltar ao menu principal')
-    main()
-
-def cadastrar_novo_usuario():
-    os.system('cls')
-    print('Cadastro do Usuário\n')
-    nome_do_usuario = input('Digite o nome do usuário: ')
-    usuarios.append(nome_do_usuario)
-    cpf_do_usuario = input('Digite o CPF: ')
-    usuarios.append(cpf_do_usuario)
-    data_nascimento = input('Digite a data de nascimento: ')
-    usuarios.append(data_nascimento)
-    endereco_do_usuario = input('Digite o endereço: ')
-    usuarios.append(endereco_do_usuario)
-    print(f'O usuário {nome_do_usuario} foi cadastrado com sucesso.\n')
-    input('Digite um tecla para voltar ao menu principal')
-    main()
-
-def listar_vacinas():
-    os.system('cls')
-    print('Lista de Vacinas\n')
-
-    for vacina in vacinas:
-        print(f'.{vacina}')
-
-def escolher_opcoes():
-    try:
-        opcao_escolhida = int(input('Escolha uma opção: '))
-
-        if opcao_escolhida == 1:
-            cadastrar_novo_usuario()
-        elif opcao_escolhida == 2:
-            cadastrar_nova_vacina()
-        elif opcao_escolhida == 3:
-            listar_vacinas()
-        elif opcao_escolhida == 4:
-            finalizar_app()
+    def aplicar_dose(self):
+        if not self.nome:
+            print('É necessário fazer o cadastro do usuário primeiro.')
+            return
+        
+        nome_vacina = input('Digite o nome da vacina: ')
+        for vacina in self.vacinas:
+            if vacina['nome'] == nome_vacina:
+                if vacina['doses_aplicadas'] < vacina['doses_totais']:
+                    vacina['doses_aplicadas'] += 1
+                    print(f'Foi aplicado com sucesso a dose da vacina: {nome_vacina}')
+                else:
+                    print(f'Já foram aplicadas todas as doses da vacina : {nome_vacina}')
+                break
         else:
-            opcao_invalida()
-    except:
-        opcao_invalida()
+            print(f'A vacina {nome_vacina}, não está cadastrada no cartão.')
 
+    def exibir_cartao(self):
+        if not self.nome:
+            print('É necessário fazer o cadastro do usuário primeiro.')
+            return
+
+        else:
+            print('Informações de Cartão de Vacinação Digital')
+            print(f'Nome: {self.nome}')
+            print(f'Cpf: {self.cpf}')
+            print(f'Data de Nascimento: {self.data_nascimento}')
+            print(f'Endereço: {self.endereco}')
+            print()
+            print('Vacinas\n')
+        for vacina in self.vacinas:
+            print(f'Nome: {vacina['nome']}')
+            print(f'Lote: {vacina['lote']}')
+            print(f'Doses totais: {vacina['doses_totais']}')
+            print(f'Doses aplicadas: {vacina['doses_aplicadas']}')
 
 def main():
-    os.system('cls')
-    exibir_nome_do_programa()
-    exibir_opcoes()
-    escolher_opcoes()
+    cartao_vacina = CartaoDeVacina()
+
+    while True:
+        print('----Cartão de Vacina Digital----\n')
+        print('1.Cadastrar Usuário')
+        print('2.Cadastrar Vacina')
+        print('3.Doses ')
+        print('4.Exibir Cartão de Vacinação')
+        print('5.Sair\n')
+
+        opcao = input('Escolha a opção: ')
+        print()
+
+        if opcao == '1':
+            cartao_vacina.adicionar_usuario()
+        elif opcao == '2':
+            cartao_vacina.cadastrar_vacina()
+        elif opcao == '3':
+            cartao_vacina.aplicar_dose()
+        elif opcao == '4':
+            cartao_vacina.exibir_cartao()
+        elif opcao == '5':
+            break
+        else:
+            print('Opção inválida, retorne ao menu principal.')
 
 if __name__ == '__main__':
     main()
+
+
